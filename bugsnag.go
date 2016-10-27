@@ -93,8 +93,8 @@ const (
 // log.Error() and log.Errorf() generates different stracktrace lengths.
 func calcSkipStackFrames(err *bugsnag_errors.Error) int {
 	for i, stackFrame := range err.StackFrames() {
-		if strings.Contains(stackFrame.Package, logPkg) && strings.Contains(stackFrame.Package, logrusPkg) && strings.Contains(stackFrame.Package, logrusBugsnagPkg) {
-			return i
+		if !strings.Contains(stackFrame.Package, logPkg) && !strings.Contains(stackFrame.Package, logrusPkg) && !strings.Contains(stackFrame.Package, logrusBugsnagPkg) {
+			return i - 1
 		}
 	}
 	return 0
