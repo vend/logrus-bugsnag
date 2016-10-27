@@ -3,9 +3,11 @@ package logrus_bugsnag
 import (
 	"errors"
 
-	"github.com/vend/logrus"
+	"strings"
+
 	"github.com/bugsnag/bugsnag-go"
 	bugsnag_errors "github.com/bugsnag/bugsnag-go/errors"
+	"github.com/vend/logrus"
 )
 
 type bugsnagHook struct{}
@@ -91,7 +93,7 @@ const (
 // log.Error() and log.Errorf() generates different stracktrace lengths.
 func calcSkipStackFrames(err *bugsnag_errors.Error) int {
 	for i, stackFrame := range err.StackFrames() {
-		if stackFrame.Package != logPkg && stackFrame.Package != logrusPkg && stackFrame.Package != logrusBugsnagPkg {
+		if strings.Contains(stackFrame.Package, logPkg) && strings.Contains(stackFrame.Package, logrusPkg) && strings.Contains(stackFrame.Package, logrusBugsnagPkg) {
 			return i
 		}
 	}
