@@ -6,6 +6,7 @@ import (
 	"context"
 	"strings"
 
+	bugsnag "github.com/bugsnag/bugsnag-go"
 	bugsnag_errors "github.com/bugsnag/bugsnag-go/errors"
 	"github.com/vend/logrus"
 )
@@ -47,7 +48,7 @@ func (hook *bugsnagHook) Fire(entry *logrus.Entry) error {
 	var notifyErr error
 	err, ok := entry.Data["error"].(error)
 	if ok {
-		if err == context.Cancelled {
+		if err == context.Canceled {
 			return nil
 		}
 		notifyErr = err
