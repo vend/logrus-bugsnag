@@ -2,6 +2,7 @@ package logrus_bugsnag
 
 import (
 	"errors"
+	"net/url"
 
 	"context"
 	"strings"
@@ -48,7 +49,7 @@ func (hook *bugsnagHook) Fire(entry *logrus.Entry) error {
 	var notifyErr error
 	err, ok := entry.Data["error"].(error)
 	if ok {
-		if err == context.Canceled {
+		if isContextCanceled(err) {
 			return nil
 		}
 		notifyErr = err
@@ -72,6 +73,15 @@ func (hook *bugsnagHook) Fire(entry *logrus.Entry) error {
 	}
 
 	return nil
+}
+
+// If error is type context cancelled, we do not want to log the error in bugsnag
+func isContextCanceled(err error) bool {
+	if err == context.Canceled {
+		return true
+	}
+	uerr, ok := err.(*url.Error)
+	return ok && uerr.Err == context.Canceled
 }
 
 // Levels enumerates the log levels on which the error should be forwarded to
