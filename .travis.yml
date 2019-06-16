@@ -1,4 +1,10 @@
 language: go
+go: "1.12.x"
 
-go:
-  - 1.4
+# Skip the installation step
+install: true
+
+script:
+  - ./ci/build.sh || travis_terminate 1
+  - go test -v ./...
+  - ./ci/linter.sh
