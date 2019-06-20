@@ -5,4 +5,4 @@
 # Linter will display error for information, but will not make the build fail.
 
 curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.17.1
-golangci-lint run || true
+golangci-lint run
