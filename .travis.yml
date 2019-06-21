@@ -1,4 +1,11 @@
 language: go
+go: "1.12.x"
 
-go:
-  - 1.4
+# Skip the installation step
+install: true
+
+# Inlining in disable in tests in order to test the stack trace correctly.
+script:
+  - ./ci/build.sh || travis_terminate 1
+  - go test -v ./... -gcflags=-l
+  - ./ci/linter.sh
